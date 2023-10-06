@@ -6,6 +6,8 @@ import requests
 from Modules import ModuleImportData
 from Modules import ModuleGetLocation
 from Modules import ModuleCleanData
+from Modules import ModuleExportData
+
 
 # Display all columns by executing print
 pd.set_option('display.max_columns', None)
@@ -19,9 +21,16 @@ dfCensus = ModuleCleanData.CleanDataCens(dfCensus)
 dfRent = ModuleCleanData.CleanDataRent(dfRent)
 
 # Add Coordinates and County Column
-df = ModuleGetLocation.add_location(dfRent)
+dfRent = ModuleGetLocation.add_location(dfRent)
+
+# LeftJoin rent + census
+dfRent = pd.merge(dfRent, dfCensus, left_on=['County', 'Year'], right_on=['County', 'Year'], how='left')
+
 
 # Missing Value review
-print(df.isnull().sum())
+#print(dfRent.isnull().sum())
 
-df.to_csv('../output/data_cso_ie_rent_out.csv', index=False)
+# Export
+dfRent.to_csv('output/data_cso_ie_rent_out.csv', index=False)
+#dfRent = ModuleExportData.ExportDataGoogle(dfRent)
+dfRent = ModuleExportData.ExportDataGoogle2()
