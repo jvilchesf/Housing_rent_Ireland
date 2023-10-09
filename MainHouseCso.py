@@ -24,13 +24,13 @@ dfRent = ModuleCleanData.CleanDataRent(dfRent)
 dfRent = ModuleGetLocation.add_location(dfRent)
 
 # LeftJoin rent + census
-dfRent = pd.merge(dfRent, dfCensus, left_on=['County', 'Year'], right_on=['County', 'Year'], how='left')
+dfRent = pd.merge(dfRent, dfCensus, left_on=['State/Province', 'Year'], right_on=['County', 'Year'], how='left')
 
 
 # Missing Value review
-#print(dfRent.isnull().sum())
+print(dfRent.isnull().sum())
+
 
 # Export
 dfRent.to_csv('output/data_cso_ie_rent_out.csv', index=False)
-#dfRent = ModuleExportData.ExportDataGoogle(dfRent)
 dfRent = ModuleExportData.ExportDataGoogle2()
